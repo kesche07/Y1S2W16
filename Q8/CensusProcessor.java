@@ -27,33 +27,30 @@ public class CensusProcessor
         return stud;
     }
     
-    public static boolean isValidCitizenship(String cit){
-        if(cit.length()==10){
-            String first = cit.substring(0,2);
-            String second = cit.substring(3);
-            
-            for(int i=0;i<first.length();i++){
-                if(Character.isDigit(cit.charAt(i))){
-                    return true;
-                }
-            }
-            
-            for(int i=0;i<second.length();i++){
-                if(Character.isDigit(cit.charAt(i))){
-                    return true;
-                }
-            }
-            
-            if(cit.charAt(2)== '-'){
-                return true;
-            }
-            else{
+       public static boolean isValidCitizenship(String cit){
+        if(cit.length() != 10){
+            return false;
+        }
+
+        if(cit.charAt(2) != '-'){
+            return false;
+        }
+
+        // check first 2 digits
+        for(int i = 0; i < 2; i++){
+            if(!Character.isDigit(cit.charAt(i))){
                 return false;
             }
         }
-        else{
-            return false;
+
+        // check last 7 digits
+        for(int i = 3; i < 10; i++){
+            if(!Character.isDigit(cit.charAt(i))){
+                return false;
+            }
         }
+
+        return true;
     }
     
     public static boolean isValidPhone(String num){
@@ -145,7 +142,8 @@ public class CensusProcessor
         sb.append(String.format("Total: %d | Valid: %d | Invalid: %d\n\n", students.length, valid, invalid));
         sb.append("- Student List: -\n");
         
-        for(Student s : students){
+        for(Student s : students)
+        {
             String cit = s.getCitizenship();
             
             String phone = s.getPhone();
@@ -153,6 +151,7 @@ public class CensusProcessor
             String initials = s.getNameInitials(name);
             int age= s.getAge();
             int grade =s.getGrade();
+            
             boolean validity = isValidCitizenship(cit) && isValidPhone(phone);
 
             sb.append(String.format("%s \t %s \t\t | %d | Grade %d | %s \n",initials,name,age, grade, validity ? "VALID" : "INVALID"));
